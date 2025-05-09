@@ -4,7 +4,7 @@ symbol VARCHAR(3) PRIMARY KEY);
 CREATE TABLE charity_account(
 id BIGINT PRIMARY KEY AUTO_INCREMENT,
 currency_symbol VARCHAR(3) NOT NULL,
-balance DECIMAL(19,2) NOT NULL,
+balance DECIMAL(19,2) NOT NULL DEFAULT 0.0,
 CONSTRAINT fk_currency FOREIGN KEY (currency_symbol) REFERENCES currency(symbol)
 );
 

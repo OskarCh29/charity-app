@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.fundraising.charity.entity.CharityAccount;
 import pl.fundraising.charity.entity.FundraisingEvent;
 import pl.fundraising.charity.exception.EventAlreadyExistsException;
+import pl.fundraising.charity.exception.RecordNotFoundException;
 import pl.fundraising.charity.model.request.EventRequest;
 import pl.fundraising.charity.repository.EventRepository;
 
@@ -29,7 +30,11 @@ public class EventService {
         event.setAccount(charityAccount);
 
         return eventRepository.save(event);
+    }
 
+    public FundraisingEvent findById(long id){
+        return eventRepository.findById(id).orElseThrow(
+                () -> new RecordNotFoundException("Event with provided id does not exist"));
     }
 
 }

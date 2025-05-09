@@ -3,18 +3,23 @@ package pl.fundraising.charity.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fundraising.charity.entity.CollectionBox;
+import pl.fundraising.charity.entity.FundraisingEvent;
+import pl.fundraising.charity.exception.BoxAlreadyAssignedException;
+import pl.fundraising.charity.exception.DonationException;
 import pl.fundraising.charity.exception.RecordNotFoundException;
+import pl.fundraising.charity.model.request.DonationRequest;
 import pl.fundraising.charity.model.response.CollectionBoxResponse;
 import pl.fundraising.charity.repository.CollectionBoxRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class CollectionBoxService {
 
     private final CollectionBoxRepository boxRepository;
+    private final EventService eventService;
+    private final DonationService donationService;
 
     public CollectionBox createNewBox() {
         return boxRepository.save(new CollectionBox());
@@ -32,20 +37,43 @@ public class CollectionBoxService {
                 )).toList();
     }
 
+    public void assignBoxToEvent(long boxId, long eventId) {
+        CollectionBox box = findById(boxId);
+        if (box.isAssigned()) {
+            throw new BoxAlreadyAssignedException("Box is already assigned to another fundraising event");
+        }
+        if (!box.isEmpty()) {
+            donationService.deleteAllDonation(box.getBoxMoney());
+            box.setBoxMoney(null);
+        }
+        FundraisingEvent event = eventService.findById(eventId);
+
+        box.setFundraisingEvent(event);
+        boxRepository.save(box);
+    }
+
+    public void donateBox(long boxId, DonationRequest request) {
+        CollectionBox box = findById(boxId);
+
+        if (!box.isAssigned()) {
+            throw new DonationException("You cannot donate not assigned box");
+        }
+        CollectionBox updatedBox = donationService.calculateBoxValue(box, request);
+        boxRepository.save(updatedBox);
+    }
+
     public void transferFundsToAccount(Long boxId) {
 
     }
 
     public void deleteBox(Long boxId) {
-        if (!checkIfRecordExists(boxId)) {
-            throw new RecordNotFoundException("Box which you want to unregister does not exist");
-        }
+        findById(boxId);
         boxRepository.deleteById(boxId);
     }
 
-    private boolean checkIfRecordExists(Long id) {
-        Optional<CollectionBox> box = boxRepository.findById(id);
-        return box.isPresent();
+    public CollectionBox findById(long boxId) {
+        return boxRepository.findById(boxId).orElseThrow(
+                () -> new RecordNotFoundException("Box with id:" + boxId + " does not exist"));
     }
 
 }

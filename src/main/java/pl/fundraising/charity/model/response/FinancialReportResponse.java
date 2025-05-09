@@ -11,7 +11,7 @@ public class FinancialReportResponse {
 
     private String charityName;
 
-    private BigDecimal amount;
+    private BigDecimal balance;
 
     private String currency;
 }
