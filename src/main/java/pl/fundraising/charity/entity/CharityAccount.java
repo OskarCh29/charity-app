@@ -1,6 +1,7 @@
 package pl.fundraising.charity.entity;
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
@@ -11,6 +12,7 @@ public class CharityAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Setter
     @ManyToOne
     private Currency currency;
 
@@ -18,4 +20,5 @@ public class CharityAccount {
 
     @OneToOne(mappedBy = "account")
     private FundraisingEvent event;
+
 }
