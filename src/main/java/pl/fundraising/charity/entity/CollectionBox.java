@@ -1,10 +1,14 @@
 package pl.fundraising.charity.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
+@Getter
+@NoArgsConstructor
 public class CollectionBox {
 
     @Id
@@ -20,5 +24,9 @@ public class CollectionBox {
 
     public boolean isEmpty() {
         return boxMoney == null || boxMoney.isEmpty();
+    }
+
+    public boolean isAssigned(){
+        return fundraisingEvent == null;
     }
 }

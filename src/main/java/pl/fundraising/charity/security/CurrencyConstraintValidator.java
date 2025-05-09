@@ -7,10 +7,14 @@ import java.util.Set;
 
 public class CurrencyConstraintValidator implements ConstraintValidator<ValidCurrency, String> {
 
-    private Set<String> validCurrencySymbols;
+    // To be corrected later
+    private final Set<String> validCurrencySymbols = Set.of("USD", "EUR", "PLN");
 
     @Override
     public boolean isValid(String currencySymbol, ConstraintValidatorContext constraintValidatorContext) {
+        if(currencySymbol.length() != 3){
+            return false;
+        }
         return validCurrencySymbols.contains(currencySymbol);
     }
 

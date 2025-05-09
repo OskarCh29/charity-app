@@ -8,10 +8,10 @@ import pl.fundraising.charity.entity.CharityAccount;
 import java.util.List;
 
 @Repository
-public interface CharityAccountRepository extends JpaRepository<CharityAccount,Long> {
+public interface CharityAccountRepository extends JpaRepository<CharityAccount, Long> {
 
-    @Query("SELECT fe.name, ca.balance, ca.currency_symbol" +
-            "FROM charity_account ca " +
-            "JOIN fundraising_event fe ")
-    List<CharityAccount> getCharityFinancialReport();
+    @Query("SELECT ca FROM CharityAccount ca " +
+            "JOIN FETCH ca.event e " +
+            "JOIN FETCH ca.currency c")
+    List<CharityAccount> findAllAccountsWithEventAndCurrency();
 }

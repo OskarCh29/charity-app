@@ -1,10 +1,12 @@
 package pl.fundraising.charity.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
+@AllArgsConstructor
 public class Donation {
 
     @Id

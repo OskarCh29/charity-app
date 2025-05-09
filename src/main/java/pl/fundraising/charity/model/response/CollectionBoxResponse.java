@@ -5,7 +5,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class GeneralServerResponse {
+public class CollectionBoxResponse {
+    private Long boxId;
 
-    private String responseMessage;
+    private boolean isAssigned;
+
+    private boolean isEmpty;
+
 }
