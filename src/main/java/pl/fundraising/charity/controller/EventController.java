@@ -23,7 +23,7 @@ public class EventController {
     @PostMapping("/event")
     public ResponseEntity<GeneralServerResponse> createNewEvent(@RequestBody @Valid EventRequest eventRequest) {
         eventService.createEvent(eventRequest);
-        return ResponseEntity.ok(new GeneralServerResponse("Event: " + eventRequest.getCharityName()
-                + " has been created. Event account base currency: " + eventRequest.getCurrencySymbol()));
+        return ResponseEntity.ok(new GeneralServerResponse("Event: " + eventRequest.getCharityName().trim()
+                + " has been created. Event account base currency: " + eventRequest.getCurrencySymbol().toUpperCase()));
     }
 }

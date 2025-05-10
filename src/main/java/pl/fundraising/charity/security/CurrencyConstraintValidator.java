@@ -24,7 +24,7 @@ public class CurrencyConstraintValidator implements ConstraintValidator<ValidCur
         if (currencySymbol == null || currencySymbol.length() != SYMBOL_LENGTH) {
             return false;
         }
-        return validCurrencySymbols.contains(currencySymbol);
+        return validCurrencySymbols.contains(currencySymbol.toUpperCase());
     }
 
     @Override

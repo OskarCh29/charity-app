@@ -47,8 +47,16 @@ public class CollectionBoxController {
         ));
     }
 
+    @PutMapping("/box/{boxId}/unregister")
+    public ResponseEntity<GeneralServerResponse> unregisterBox(
+            @PathVariable long boxId) {
+        boxService.unregisterBoxFromEvent(boxId);
+        return ResponseEntity.ok(new GeneralServerResponse(
+                "Box with id: " + boxId + " has been unregistered from fundraising event"));
+    }
+
     // Change to object
-    @PutMapping("/box/{boxId}")
+    @PutMapping("/box/{boxId}/donate")
     public ResponseEntity<GeneralServerResponse> donateMoneyToBox(
             @PathVariable long boxId,
             @Valid @RequestBody DonationRequest request) {

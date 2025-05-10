@@ -23,10 +23,10 @@ public class EventService {
         if (existingEvent.isPresent()) {
             throw new EventAlreadyExistsException("Event with provided name already exists");
         }
-        CharityAccount charityAccount = accountService.createAccount(request.getCurrencySymbol());
+        CharityAccount charityAccount = accountService.createAccount(request.getCurrencySymbol().toUpperCase());
 
         FundraisingEvent event = new FundraisingEvent();
-        event.setName(request.getCharityName());
+        event.setName(request.getCharityName().trim());
         event.setAccount(charityAccount);
 
         return eventRepository.save(event);

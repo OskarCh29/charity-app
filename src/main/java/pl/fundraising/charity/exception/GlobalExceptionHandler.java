@@ -6,8 +6,8 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import pl.fundraising.charity.model.response.ErrorResponse;
-import pl.fundraising.charity.model.response.GeneralServerResponse;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,14 +26,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         String errorMessage = e.getBindingResult().getAllErrors()
                 .stream()
                 .map(objectError -> objectError.getDefaultMessage())
                 .findFirst()
                 .orElse("Validation failed - check request values");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new GeneralServerResponse(errorMessage)
-        );
+        return new ResponseEntity<>(new ErrorResponse(status.value(), errorMessage), status);
     }
 
     @ExceptionHandler
@@ -50,14 +49,20 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler
     public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
-        HttpStatus status = HttpStatus.BAD_GATEWAY;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(new ErrorResponse(status.value(),
                 "Invalid input - check your request"), status);
     }
 
     @ExceptionHandler
     public ResponseEntity<?> handleCantorClientException(CantorClientException e) {
-        HttpStatus status = HttpStatus.BAD_GATEWAY;
+        HttpStatus status = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(new ErrorResponse(status.value(), e.getMessage()), status);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleNoResourceFoundException(NoResourceFoundException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(new ErrorResponse(status.value(), "Resource not found"), status);
     }
 }

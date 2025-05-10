@@ -30,6 +30,9 @@ public class CollectionBoxService {
 
     public List<CollectionBoxResponse> getAllBoxesInfo() {
         List<CollectionBox> allBoxes = boxRepository.findAll();
+        if (allBoxes.isEmpty()) {
+            throw new RecordNotFoundException("No boxes available - please create new one");
+        }
 
         return allBoxes
                 .stream()
@@ -51,6 +54,15 @@ public class CollectionBoxService {
         FundraisingEvent event = eventService.findById(eventId);
 
         box.setFundraisingEvent(event);
+        boxRepository.save(box);
+    }
+
+    public void unregisterBoxFromEvent(long boxId) {
+        CollectionBox box = findById(boxId);
+        if (!box.isEmpty()) {
+            donationService.deleteDonationFromBox(boxId);
+        }
+        box.setFundraisingEvent(null);
         boxRepository.save(box);
     }
 
@@ -85,7 +97,7 @@ public class CollectionBoxService {
 
     public CollectionBox findById(long boxId) {
         return boxRepository.findById(boxId).orElseThrow(
-                () -> new RecordNotFoundException("Box with id:" + boxId + " does not exist"));
+                () -> new RecordNotFoundException("Box with id: " + boxId + " does not exist"));
     }
 
 }

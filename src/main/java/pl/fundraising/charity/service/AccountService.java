@@ -34,6 +34,9 @@ public class AccountService {
 
     public List<FinancialReportResponse> getAccountsFinancialReport() {
         List<CharityAccount> allAccounts = accountRepository.findAllAccountsWithEventAndCurrency();
+        if (allAccounts.isEmpty()) {
+            throw new RecordNotFoundException("Cannot generate financial report - no fundraising event found");
+        }
 
         return allAccounts.stream()
                 .map(charityAccount -> new FinancialReportResponse(
