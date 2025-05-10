@@ -29,3 +29,6 @@ collection_box_id BIGINT NOT NULL,
 CONSTRAINT fk_box FOREIGN KEY (collection_box_id) REFERENCES collection_box(id),
 CONSTRAINT fk_currency_symbol FOREIGN KEY (currency_symbol) REFERENCES currency(symbol)
 );
+
+INSERT INTO currency VALUES
+('USD'),('EUR'),('PLN'),('CHF'),('AUS'),('YEN'),('GBP');

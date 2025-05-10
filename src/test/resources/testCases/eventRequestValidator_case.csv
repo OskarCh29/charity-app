@@ -1,0 +1,6 @@
+TestCharity,PL,Invalid currency symbol
+TestCharity,,Invalid currency symbol
+TestCharity,PLM,Invalid currency symbol
+,PLN,Field too short or invalid format
+        ,PLN,Field too short or invalid format
+AB   ,PLN,Field too short or invalid format

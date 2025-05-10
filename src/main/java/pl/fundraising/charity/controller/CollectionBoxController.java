@@ -2,11 +2,13 @@ package pl.fundraising.charity.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.fundraising.charity.model.request.AssignRequest;
 import pl.fundraising.charity.model.request.DonationRequest;
 import pl.fundraising.charity.model.response.CollectionBoxResponse;
+import pl.fundraising.charity.model.response.DonationResponse;
 import pl.fundraising.charity.model.response.GeneralServerResponse;
 import pl.fundraising.charity.service.CollectionBoxService;
 
@@ -27,14 +29,14 @@ public class CollectionBoxController {
     @PostMapping("/box")
     public ResponseEntity<GeneralServerResponse> registerBox() {
         boxService.createNewBox();
-        return ResponseEntity.ok(new GeneralServerResponse("New Empty box created"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new GeneralServerResponse("New Empty box created"));
     }
 
     @DeleteMapping("/box/{id}")
     public ResponseEntity<GeneralServerResponse> removeBox(@PathVariable long id) {
         boxService.deleteBox(id);
         return ResponseEntity.ok(new GeneralServerResponse(
-                "Box wih id:" + id + " has been unregistered"));
+                "Box wih id:" + id + " has been removed"));
     }
 
     @PutMapping("/box/{boxId}/assign")
@@ -55,21 +57,19 @@ public class CollectionBoxController {
                 "Box with id: " + boxId + " has been unregistered from fundraising event"));
     }
 
-    // Change to object
     @PutMapping("/box/{boxId}/donate")
-    public ResponseEntity<GeneralServerResponse> donateMoneyToBox(
+    public ResponseEntity<DonationResponse> donateMoneyToBox(
             @PathVariable long boxId,
             @Valid @RequestBody DonationRequest request) {
 
         boxService.donateBox(boxId, request);
-        return ResponseEntity.ok(new GeneralServerResponse(
-                "Donated box " + boxId + " with: " + request.getAmount() + request.getCurrency()));
+        return ResponseEntity.ok(new DonationResponse(boxId, request.getAmount(), request.getCurrency()));
     }
 
     @PutMapping("/box/{boxId}/transfer")
     public ResponseEntity<GeneralServerResponse> transferBalanceToAccount(@PathVariable long boxId) {
         boxService.transferFundsToAccount(boxId);
         return ResponseEntity.ok().body(new GeneralServerResponse(
-                "Balance from box: " + boxId + " has been transfer to assigned charity account"));
+                "Balance from box: " + boxId + " has been transferred to assigned charity account"));
     }
 }

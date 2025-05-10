@@ -13,7 +13,7 @@ public class TrimmedNotBlankValidator implements ConstraintValidator<TrimmedNotB
             return false;
         }
         String trimmed = value.trim();
-        return !trimmed.isEmpty() && trimmed.length() >= minLength;
+        return trimmed.length() >= minLength;
     }
 
     @Override

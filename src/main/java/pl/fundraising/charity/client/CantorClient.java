@@ -34,14 +34,20 @@ public class CantorClient {
                     .map(Currency::getSymbol)
                     .collect(Collectors.joining(","));
 
-            String urlFormat = cantorUrl + "?base_currency=" + baseCurrency + "&currencies=" + currencies;
+            StringBuilder queryBuilder = new StringBuilder()
+                    .append(cantorUrl)
+                    .append("?base_currency=")
+                    .append(baseCurrency)
+                    .append("&currencies=")
+                    .append(currencies);
 
             HttpHeaders headers = new HttpHeaders();
             headers.set("apiKey", securityKey);
 
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
-            ResponseEntity<Cantor> response = restTemplate.exchange(urlFormat, HttpMethod.GET, entity, Cantor.class);
+            ResponseEntity<Cantor> response = restTemplate.exchange(
+                    queryBuilder.toString(), HttpMethod.GET, entity, Cantor.class);
 
             Cantor cantor = response.getBody();
             cantor.setBaseCurrency(baseCurrency);
