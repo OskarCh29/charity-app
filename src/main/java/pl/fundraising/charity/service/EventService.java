@@ -32,7 +32,7 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public FundraisingEvent findById(long id){
+    public FundraisingEvent findById(long id) {
         return eventRepository.findById(id).orElseThrow(
                 () -> new RecordNotFoundException("Event with provided id does not exist"));
     }

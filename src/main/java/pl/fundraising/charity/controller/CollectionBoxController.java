@@ -57,8 +57,9 @@ public class CollectionBoxController {
         return ResponseEntity.ok(new GeneralServerResponse(
                 "Donated box " + boxId + " with: " + request.getAmount() + request.getCurrency()));
     }
+
     @PutMapping("/box/{boxId}/transfer")
-    public ResponseEntity<GeneralServerResponse> transferBalanceToAccount(@PathVariable long boxId){
+    public ResponseEntity<GeneralServerResponse> transferBalanceToAccount(@PathVariable long boxId) {
         boxService.transferFundsToAccount(boxId);
         return ResponseEntity.ok().body(new GeneralServerResponse(
                 "Balance from box: " + boxId + " has been transfer to assigned charity account"));

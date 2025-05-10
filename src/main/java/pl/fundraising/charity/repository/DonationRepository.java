@@ -8,11 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.fundraising.charity.entity.Donation;
 
 @Repository
-public interface DonationRepository extends JpaRepository<Donation,Long> {
+public interface DonationRepository extends JpaRepository<Donation, Long> {
 
     @Modifying
     @Transactional
-    @Query("DELETE FROM Donation d " +
-            "WHERE d.collectionBox.id = :boxId")
+    @Query("DELETE FROM Donation d "
+            + "WHERE d.collectionBox.id = :boxId")
     void deleteAllBoxDonations(Long boxId);
 }

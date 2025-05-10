@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface CharityAccountRepository extends JpaRepository<CharityAccount, Long> {
 
-    @Query("SELECT ca FROM CharityAccount ca " +
-            "JOIN FETCH ca.event e " +
-            "JOIN FETCH ca.currency c")
+    @Query("SELECT ca FROM CharityAccount ca "
+            + "JOIN FETCH ca.event e "
+            + "JOIN FETCH ca.currency c")
     List<CharityAccount> findAllAccountsWithEventAndCurrency();
 }

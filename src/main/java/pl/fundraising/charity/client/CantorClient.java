@@ -26,7 +26,7 @@ public class CantorClient {
     private String cantorUrl;
 
     @Value("${cantor.securityKey}")
-    private String security_key;
+    private String securityKey;
 
     public Cantor getExchangeRates(String baseCurrency, List<Currency> exchangeCurrencies) {
         try {
@@ -37,7 +37,7 @@ public class CantorClient {
             String urlFormat = cantorUrl + "?base_currency=" + baseCurrency + "&currencies=" + currencies;
 
             HttpHeaders headers = new HttpHeaders();
-            headers.set("apiKey", security_key);
+            headers.set("apiKey", securityKey);
 
             HttpEntity<String> entity = new HttpEntity<>(headers);
 

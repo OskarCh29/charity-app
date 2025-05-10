@@ -26,7 +26,7 @@ public class CantorService {
         return donations.stream()
                 .map(donation -> {
                     BigDecimal rate = cantor.getChangingRates().get(donation.getCurrency().getSymbol());
-                    return donation.getAmount().divide(rate,2, RoundingMode.HALF_UP);
+                    return donation.getAmount().divide(rate, 2, RoundingMode.HALF_UP);
                 })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }

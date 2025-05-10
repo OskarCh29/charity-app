@@ -15,12 +15,13 @@ import java.util.stream.Collectors;
 public class CurrencyConstraintValidator implements ConstraintValidator<ValidCurrency, String> {
 
     private final CurrencyRepository currencyRepository;
+    private static final int SYMBOL_LENGTH = 3;
 
     private Set<String> validCurrencySymbols;
 
     @Override
     public boolean isValid(String currencySymbol, ConstraintValidatorContext constraintValidatorContext) {
-        if (currencySymbol == null || currencySymbol.length() != 3) {
+        if (currencySymbol == null || currencySymbol.length() != SYMBOL_LENGTH) {
             return false;
         }
         return validCurrencySymbols.contains(currencySymbol);

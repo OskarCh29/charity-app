@@ -28,7 +28,7 @@ public class CollectionBox {
         return boxMoney == null || boxMoney.isEmpty();
     }
 
-    public boolean isAssigned(){
+    public boolean isAssigned() {
         return fundraisingEvent != null;
     }
 }

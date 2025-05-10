@@ -22,6 +22,6 @@ public class FundraisingEvent {
     @OneToOne
     private CharityAccount account;
 
-    @OneToMany(mappedBy = "fundraisingEvent",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "fundraisingEvent", cascade = CascadeType.ALL)
     private List<CollectionBox> collectionBoxes;
 }

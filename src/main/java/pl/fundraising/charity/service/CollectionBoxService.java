@@ -2,7 +2,6 @@ package pl.fundraising.charity.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import pl.fundraising.charity.entity.CollectionBox;
 import pl.fundraising.charity.entity.FundraisingEvent;
 import pl.fundraising.charity.exception.BoxAlreadyAssignedException;
@@ -67,15 +66,15 @@ public class CollectionBoxService {
 
     public void transferFundsToAccount(long boxId) {
         CollectionBox box = findById(boxId);
-        if(box.isEmpty() ){
+        if (box.isEmpty()) {
             throw new DonationException("Cannot transfer funds because box is empty");
         }
         long assignedEventId = box.getFundraisingEvent().getId();
         String baseCurrency = accountService.checkAccountBaseCurrency(assignedEventId);
 
-        BigDecimal payment = cantorService.exchangeBoxCurrencies(baseCurrency,box);
+        BigDecimal payment = cantorService.exchangeBoxCurrencies(baseCurrency, box);
 
-        accountService.receivePayment(payment,assignedEventId);
+        accountService.receivePayment(payment, assignedEventId);
         donationService.deleteDonationFromBox(boxId);
     }
 

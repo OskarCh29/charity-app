@@ -11,7 +11,7 @@ import pl.fundraising.charity.security.ValidCurrency;
 public class EventRequest {
 
     @NotBlank(message = "Charity event name cannot be empty")
-    @Pattern(regexp = "^.{3,}",message = "Event name should be at least 3 characters")
+    @Pattern(regexp = "^.{3,}", message = "Event name should be at least 3 characters")
     private String charityName;
 
     @ValidCurrency
