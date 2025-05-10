@@ -47,14 +47,20 @@ public class CollectionBoxController {
         ));
     }
 
+    // Change to object
     @PutMapping("/box/{boxId}")
     public ResponseEntity<GeneralServerResponse> donateMoneyToBox(
             @PathVariable long boxId,
             @Valid @RequestBody DonationRequest request) {
 
-        boxService.donateBox(boxId,request);
+        boxService.donateBox(boxId, request);
         return ResponseEntity.ok(new GeneralServerResponse(
                 "Donated box " + boxId + " with: " + request.getAmount() + request.getCurrency()));
     }
-
+    @PutMapping("/box/{boxId}/transfer")
+    public ResponseEntity<GeneralServerResponse> transferBalanceToAccount(@PathVariable long boxId){
+        boxService.transferFundsToAccount(boxId);
+        return ResponseEntity.ok().body(new GeneralServerResponse(
+                "Balance from box: " + boxId + " has been transfer to assigned charity account"));
+    }
 }

@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.fundraising.charity.entity.CharityAccount;
 import pl.fundraising.charity.entity.Currency;
+import pl.fundraising.charity.exception.RecordNotFoundException;
 import pl.fundraising.charity.model.response.FinancialReportResponse;
 import pl.fundraising.charity.repository.CharityAccountRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -23,7 +25,14 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    public List<FinancialReportResponse> getAccountsFinancialReport(){
+    public void receivePayment(BigDecimal payment, long accountId) {
+        CharityAccount account = findById(accountId);
+        account.setBalance(account.getBalance().add(payment));
+        accountRepository.save(account);
+
+    }
+
+    public List<FinancialReportResponse> getAccountsFinancialReport() {
         List<CharityAccount> allAccounts = accountRepository.findAllAccountsWithEventAndCurrency();
 
         return allAccounts.stream()
@@ -32,5 +41,16 @@ public class AccountService {
                         charityAccount.getBalance(),
                         charityAccount.getCurrency().getSymbol())
                 ).toList();
+    }
+
+    public String checkAccountBaseCurrency(long accountId) {
+        CharityAccount account = findById(accountId);
+
+        return account.getCurrency().getSymbol();
+    }
+
+    public CharityAccount findById(long accountId) {
+        return accountRepository.findById(accountId).orElseThrow(
+                () -> new RecordNotFoundException("Account not exists"));
     }
 }

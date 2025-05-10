@@ -2,6 +2,7 @@ package pl.fundraising.charity.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.fundraising.charity.entity.CollectionBox;
 import pl.fundraising.charity.entity.FundraisingEvent;
 import pl.fundraising.charity.exception.BoxAlreadyAssignedException;
@@ -11,6 +12,7 @@ import pl.fundraising.charity.model.request.DonationRequest;
 import pl.fundraising.charity.model.response.CollectionBoxResponse;
 import pl.fundraising.charity.repository.CollectionBoxRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -20,6 +22,8 @@ public class CollectionBoxService {
     private final CollectionBoxRepository boxRepository;
     private final EventService eventService;
     private final DonationService donationService;
+    private final AccountService accountService;
+    private final CantorService cantorService;
 
     public CollectionBox createNewBox() {
         return boxRepository.save(new CollectionBox());
@@ -43,8 +47,7 @@ public class CollectionBoxService {
             throw new BoxAlreadyAssignedException("Box is already assigned to another fundraising event");
         }
         if (!box.isEmpty()) {
-            donationService.deleteAllDonation(box.getBoxMoney());
-            box.setBoxMoney(null);
+            donationService.deleteDonationFromBox(boxId);
         }
         FundraisingEvent event = eventService.findById(eventId);
 
@@ -62,8 +65,18 @@ public class CollectionBoxService {
         boxRepository.save(updatedBox);
     }
 
-    public void transferFundsToAccount(Long boxId) {
+    public void transferFundsToAccount(long boxId) {
+        CollectionBox box = findById(boxId);
+        if(box.isEmpty() ){
+            throw new DonationException("Cannot transfer funds because box is empty");
+        }
+        long assignedEventId = box.getFundraisingEvent().getId();
+        String baseCurrency = accountService.checkAccountBaseCurrency(assignedEventId);
 
+        BigDecimal payment = cantorService.exchangeBoxCurrencies(baseCurrency,box);
+
+        accountService.receivePayment(payment,assignedEventId);
+        donationService.deleteDonationFromBox(boxId);
     }
 
     public void deleteBox(Long boxId) {

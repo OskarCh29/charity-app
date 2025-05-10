@@ -5,7 +5,9 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class GeneralServerResponse {
+public class ErrorResponse {
 
-    private String message;
+    private int code;
+
+    private String errorMessage;
 }

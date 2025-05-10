@@ -16,10 +16,8 @@ import java.util.Optional;
 public class DonationService {
     private final DonationRepository donationRepository;
 
-    public void deleteAllDonation(List<Donation> donation) {
-        for (Donation don : donation) {
-            donationRepository.delete(don);
-        }
+    public void deleteDonationFromBox(long boxId) {
+        donationRepository.deleteAllBoxDonations(boxId);
     }
 
     public CollectionBox calculateBoxValue(CollectionBox charityBox, DonationRequest request) {

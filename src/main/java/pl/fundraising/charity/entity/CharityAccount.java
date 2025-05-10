@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class CharityAccount {
 
@@ -16,7 +17,6 @@ public class CharityAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Setter
     @ManyToOne
     private Currency currency;
 
