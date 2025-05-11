@@ -1,5 +1,6 @@
 package pl.fundraising.charity.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Donation {
     private BigDecimal amount;
 
     @ManyToOne
+    @JsonBackReference
     private CollectionBox collectionBox;
 
 }

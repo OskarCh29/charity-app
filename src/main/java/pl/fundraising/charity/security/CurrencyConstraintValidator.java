@@ -24,14 +24,16 @@ public class CurrencyConstraintValidator implements ConstraintValidator<ValidCur
         if (currencySymbol == null || currencySymbol.length() != SYMBOL_LENGTH) {
             return false;
         }
+        if (validCurrencySymbols == null) {
+            validCurrencySymbols = currencyRepository.findAll()
+                    .stream()
+                    .map(Currency::getSymbol)
+                    .collect(Collectors.toSet());
+        }
         return validCurrencySymbols.contains(currencySymbol.toUpperCase());
     }
 
     @Override
     public void initialize(ValidCurrency constraintAnnotation) {
-        validCurrencySymbols = currencyRepository.findAll()
-                .stream()
-                .map(Currency::getSymbol)
-                .collect(Collectors.toSet());
     }
 }

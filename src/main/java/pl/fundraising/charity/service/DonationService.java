@@ -37,6 +37,7 @@ public class DonationService {
             donation.setAmount(request.getAmount());
             donation.setCurrency(new Currency(request.getCurrency()));
             donation.setCollectionBox(charityBox);
+            charityBox.getBoxMoney().add(donation);
 
             donationRepository.save(donation);
         }

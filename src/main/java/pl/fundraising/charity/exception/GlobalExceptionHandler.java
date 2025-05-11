@@ -3,9 +3,11 @@ package pl.fundraising.charity.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import pl.fundraising.charity.model.response.ErrorResponse;
 
@@ -48,10 +50,23 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+    public ResponseEntity<?> handleTransferException(TransferException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        return new ResponseEntity<>(new ErrorResponse(status.value(), e.getMessage()), status);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(new ErrorResponse(status.value(),
-                "Invalid input - check your request"), status);
+                e.getMessage()), status);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(new ErrorResponse(status.value(),
+                "Invalid input type - check your request"), status);
     }
 
     @ExceptionHandler
@@ -64,5 +79,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleNoResourceFoundException(NoResourceFoundException e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(new ErrorResponse(status.value(), "Resource not found"), status);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<?> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        return new ResponseEntity<>(new ErrorResponse(status.value(),
+                "Invalid input - check your request"), status);
     }
 }

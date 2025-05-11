@@ -1,5 +1,6 @@
 package pl.fundraising.charity.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +24,7 @@ public class CharityAccount {
     private BigDecimal balance = BigDecimal.ZERO;
 
     @OneToOne(mappedBy = "account")
+    @JsonBackReference
     private FundraisingEvent event;
 
 }

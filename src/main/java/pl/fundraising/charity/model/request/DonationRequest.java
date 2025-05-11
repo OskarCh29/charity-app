@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class DonationRequest {
 
     @NotNull(message = "Donation amount is required")
-    @DecimalMin(value = "0.01", message = "Donation must be at leas 0.01")
+    @DecimalMin(value = "0.01", message = "Donation must be at least 0.01")
     @Digits(integer = 10, fraction = 2, message = "Amount must be a valid monetary value")
     private BigDecimal amount;
 

@@ -1,0 +1,4 @@
+,PLN,Donation amount is required
+-10,PLN,Donation must be at least 0.01
+10.125,PLN,Amount must be a valid monetary value
+100,USD,Invalid currency symbol

@@ -26,7 +26,7 @@ public class EventService {
         CharityAccount charityAccount = accountService.createAccount(request.getCurrencySymbol().toUpperCase());
 
         FundraisingEvent event = new FundraisingEvent();
-        event.setName(request.getCharityName().trim());
+        event.setName(request.getCharityName());
         event.setAccount(charityAccount);
 
         return eventRepository.save(event);

@@ -7,6 +7,7 @@ import pl.fundraising.charity.entity.FundraisingEvent;
 import pl.fundraising.charity.exception.BoxAlreadyAssignedException;
 import pl.fundraising.charity.exception.DonationException;
 import pl.fundraising.charity.exception.RecordNotFoundException;
+import pl.fundraising.charity.exception.TransferException;
 import pl.fundraising.charity.model.request.DonationRequest;
 import pl.fundraising.charity.model.response.CollectionBoxResponse;
 import pl.fundraising.charity.repository.CollectionBoxRepository;
@@ -29,7 +30,7 @@ public class CollectionBoxService {
     }
 
     public List<CollectionBoxResponse> getAllBoxesInfo() {
-        List<CollectionBox> allBoxes = boxRepository.findAll();
+        List<CollectionBox> allBoxes = boxRepository.findBoxesWithAllContent();
         if (allBoxes.isEmpty()) {
             throw new RecordNotFoundException("No boxes available - please create new one");
         }
@@ -46,7 +47,7 @@ public class CollectionBoxService {
     public void assignBoxToEvent(long boxId, long eventId) {
         CollectionBox box = findById(boxId);
         if (box.isAssigned()) {
-            throw new BoxAlreadyAssignedException("Box is already assigned to another fundraising event");
+            throw new BoxAlreadyAssignedException("Box is already assigned to fundraising event");
         }
         if (!box.isEmpty()) {
             donationService.deleteDonationFromBox(boxId);
@@ -79,7 +80,7 @@ public class CollectionBoxService {
     public void transferFundsToAccount(long boxId) {
         CollectionBox box = findById(boxId);
         if (box.isEmpty()) {
-            throw new DonationException("Cannot transfer funds because box is empty");
+            throw new TransferException("Cannot transfer funds because box is empty");
         }
         long assignedEventId = box.getFundraisingEvent().getId();
         String baseCurrency = accountService.checkAccountBaseCurrency(assignedEventId);
