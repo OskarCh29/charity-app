@@ -14,7 +14,6 @@ Application for managing collection boxes during fundraising events.
 
 ## Requirements
 - Java 21
-- Spring boot 3.4.4 +
 - Maven 3.9.4 +
 - Postman - for testing purposes (Optional)
 
