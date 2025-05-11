@@ -5,7 +5,7 @@ Application for managing collection boxes during fundraising events.
 ## Table of Contents
 
 - [Requirements](#requirements)
-- [Functionalities](#funcionalities)
+- [Functionalities](#functionalities)
 - [Installation and configuration](#installation-and-configuration)
 - [Documentation](#documentation)
 - [Technologies](#technologies)
