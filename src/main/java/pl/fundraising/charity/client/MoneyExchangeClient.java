@@ -9,33 +9,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import pl.fundraising.charity.entity.Cantor;
+import pl.fundraising.charity.entity.MoneyExchange;
 import pl.fundraising.charity.entity.Currency;
-import pl.fundraising.charity.exception.CantorClientException;
+import pl.fundraising.charity.exception.MoneyExchangeClientException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class CantorClient {
+public class MoneyExchangeClient {
 
     private final RestTemplate restTemplate;
 
-    @Value("${cantor.baseUrl}")
-    private String cantorUrl;
+    @Value("${exchange.baseUrl}")
+    private String exchangeUrl;
 
-    @Value("${cantor.securityKey}")
+    @Value("${exchange.securityKey}")
     private String securityKey;
 
-    public Cantor getExchangeRates(String baseCurrency, List<Currency> exchangeCurrencies) {
+    public MoneyExchange getExchangeRates(String baseCurrency, List<Currency> exchangeCurrencies) {
         try {
             String currencies = exchangeCurrencies.stream()
                     .map(Currency::getSymbol)
                     .collect(Collectors.joining(","));
 
             StringBuilder queryBuilder = new StringBuilder()
-                    .append(cantorUrl)
+                    .append(exchangeUrl)
                     .append("?base_currency=")
                     .append(baseCurrency)
                     .append("&currencies=")
@@ -46,16 +46,17 @@ public class CantorClient {
 
             HttpEntity<String> entity = new HttpEntity<>(headers);
 
-            ResponseEntity<Cantor> response = restTemplate.exchange(
-                    queryBuilder.toString(), HttpMethod.GET, entity, Cantor.class);
+            ResponseEntity<MoneyExchange> response = restTemplate.exchange(
+                    queryBuilder.toString(), HttpMethod.GET, entity, MoneyExchange.class);
 
-            Cantor cantor = response.getBody();
-            cantor.setBaseCurrency(baseCurrency);
+            MoneyExchange moneyExchange = response.getBody();
+            moneyExchange.setBaseCurrency(baseCurrency);
 
-            return cantor;
+            return moneyExchange;
 
         } catch (HttpClientErrorException e) {
-            throw new CantorClientException("Client error: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+            throw new MoneyExchangeClientException(
+                    "Client error: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
         }
     }
 

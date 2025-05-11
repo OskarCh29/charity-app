@@ -56,4 +56,5 @@ public class AccountService {
         return accountRepository.findById(accountId).orElseThrow(
                 () -> new RecordNotFoundException("Account not exists"));
     }
+
 }

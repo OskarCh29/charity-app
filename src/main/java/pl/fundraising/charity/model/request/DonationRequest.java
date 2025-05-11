@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.fundraising.charity.security.ValidCurrency;
+import pl.fundraising.charity.validator.ValidCurrency;
 
 import java.math.BigDecimal;
 

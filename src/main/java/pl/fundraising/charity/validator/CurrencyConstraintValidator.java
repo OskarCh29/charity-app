@@ -1,4 +1,4 @@
-package pl.fundraising.charity.security;
+package pl.fundraising.charity.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

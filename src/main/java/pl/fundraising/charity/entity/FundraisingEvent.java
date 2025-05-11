@@ -26,4 +26,5 @@ public class FundraisingEvent {
 
     @OneToMany(mappedBy = "fundraisingEvent", cascade = CascadeType.ALL)
     private List<CollectionBox> collectionBoxes;
+
 }

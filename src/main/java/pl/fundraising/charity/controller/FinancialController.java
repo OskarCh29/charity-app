@@ -21,4 +21,5 @@ public class FinancialController {
     public ResponseEntity<List<FinancialReportResponse>> getFinancialReport() {
         return ResponseEntity.ok(accountService.getAccountsFinancialReport());
     }
+
 }

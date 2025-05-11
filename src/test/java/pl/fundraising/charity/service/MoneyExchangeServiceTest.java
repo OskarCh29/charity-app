@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.util.ReflectionTestUtils;
-import pl.fundraising.charity.client.CantorClient;
-import pl.fundraising.charity.entity.Cantor;
+import pl.fundraising.charity.client.MoneyExchangeClient;
+import pl.fundraising.charity.entity.MoneyExchange;
 import pl.fundraising.charity.entity.CollectionBox;
 import pl.fundraising.charity.entity.Currency;
 import pl.fundraising.charity.entity.Donation;
@@ -20,13 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 @SpringBootTest
-public class CantorServiceTest {
+public class MoneyExchangeServiceTest {
 
     @MockitoBean
-    private CantorClient client;
+    private MoneyExchangeClient client;
 
     @Autowired
-    private CantorService cantorService;
+    private MoneyExchangeService moneyExchangeService;
 
     @Test
     void shouldCalculateAllCurrenciesToBaseCurrencyBasedOnExchangeRate() {
@@ -39,15 +39,15 @@ public class CantorServiceTest {
         List<Donation> boxDonations = List.of(donation);
         box.setBoxMoney(boxDonations);
 
-        Cantor testCantor = new Cantor();
-        testCantor.setBaseCurrency(baseCurrency);
+        MoneyExchange testMoneyExchange = new MoneyExchange();
+        testMoneyExchange.setBaseCurrency(baseCurrency);
         Map<String,BigDecimal> exchangeRates = new HashMap<>();
         exchangeRates.put("EUR",BigDecimal.valueOf(0.25));
-        ReflectionTestUtils.setField(testCantor,"changingRates",exchangeRates);
+        ReflectionTestUtils.setField(testMoneyExchange,"changingRates",exchangeRates);
 
-        when(client.getExchangeRates(any(), any())).thenReturn(testCantor);
+        when(client.getExchangeRates(any(), any())).thenReturn(testMoneyExchange);
 
-        BigDecimal exchangedValue = cantorService.exchangeBoxCurrencies(baseCurrency, box);
+        BigDecimal exchangedValue = moneyExchangeService.exchangeBoxCurrencies(baseCurrency, box);
 
         assertEquals(BigDecimal.valueOf(400).stripTrailingZeros(),exchangedValue.stripTrailingZeros());
     }

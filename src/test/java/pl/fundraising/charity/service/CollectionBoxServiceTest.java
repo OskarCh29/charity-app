@@ -16,15 +16,12 @@ import pl.fundraising.charity.model.response.CollectionBoxResponse;
 import pl.fundraising.charity.repository.CollectionBoxRepository;
 import pl.fundraising.charity.repository.CurrencyRepository;
 import pl.fundraising.charity.repository.EventRepository;
-import wiremock.org.checkerframework.checker.units.qual.C;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
@@ -49,7 +46,7 @@ public class CollectionBoxServiceTest {
     private AccountService accountService;
 
     @MockitoBean
-    private CantorService cantorService;
+    private MoneyExchangeService moneyExchangeService;
 
     @BeforeEach
     void clearRecords() {
@@ -202,7 +199,7 @@ public class CollectionBoxServiceTest {
         boxRepository.save(box);
 
         when(accountService.checkAccountBaseCurrency(box.getFundraisingEvent().getId())).thenReturn("USD");
-        when(cantorService.exchangeBoxCurrencies("USD",box)).thenReturn(BigDecimal.valueOf(100));
+        when(moneyExchangeService.exchangeBoxCurrencies("USD",box)).thenReturn(BigDecimal.valueOf(100));
 
         boxService.transferFundsToAccount(box.getId());
 

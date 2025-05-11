@@ -2,8 +2,8 @@ package pl.fundraising.charity.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import pl.fundraising.charity.security.TrimmedNotBlank;
-import pl.fundraising.charity.security.ValidCurrency;
+import pl.fundraising.charity.validator.TrimmedNotBlank;
+import pl.fundraising.charity.validator.ValidCurrency;
 
 @AllArgsConstructor
 @Getter

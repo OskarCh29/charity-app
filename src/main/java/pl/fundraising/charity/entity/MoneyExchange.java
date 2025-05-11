@@ -12,11 +12,12 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Cantor {
+public class MoneyExchange {
 
     @Setter
     private String baseCurrency;
 
     @JsonProperty("data")
     private Map<String, BigDecimal> changingRates;
+
 }

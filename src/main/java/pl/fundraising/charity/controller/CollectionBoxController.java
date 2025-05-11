@@ -72,4 +72,5 @@ public class CollectionBoxController {
         return ResponseEntity.ok().body(new GeneralServerResponse(
                 "Balance from box: " + boxId + " has been transferred to assigned charity account"));
     }
+
 }

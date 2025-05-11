@@ -11,4 +11,5 @@ public class WebConfiguration {
     public RestTemplate restTemplate() {
         return new RestTemplate();
     }
+
 }

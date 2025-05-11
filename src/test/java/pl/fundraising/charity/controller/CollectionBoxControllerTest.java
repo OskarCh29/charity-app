@@ -282,13 +282,13 @@ public class CollectionBoxControllerTest {
     }
 
     @Test
-    void transferBoxMoneyToAccountShouldReturn400causedByCantorError() throws Exception {
-        doThrow(new CantorClientException("Cantor error")).when(boxService).transferFundsToAccount(anyLong());
+    void transferBoxMoneyToAccountShouldReturn400causedByExchangeError() throws Exception {
+        doThrow(new MoneyExchangeClientException("Exchange error")).when(boxService).transferFundsToAccount(anyLong());
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/box/{boxId}/transfer", 1))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value(400))
-                .andExpect(jsonPath("$.errorMessage").value("Cantor error"));
+                .andExpect(jsonPath("$.errorMessage").value("Exchange error"));
     }
 
     @Test

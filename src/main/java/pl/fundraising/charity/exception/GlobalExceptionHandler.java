@@ -70,7 +70,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<?> handleCantorClientException(CantorClientException e) {
+    public ResponseEntity<?> handleExchangeClientException(MoneyExchangeClientException e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
         return new ResponseEntity<>(new ErrorResponse(status.value(), e.getMessage()), status);
     }

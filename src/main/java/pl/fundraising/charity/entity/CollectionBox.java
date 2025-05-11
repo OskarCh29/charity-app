@@ -35,4 +35,5 @@ public class CollectionBox {
     public boolean isAssigned() {
         return fundraisingEvent != null;
     }
+
 }

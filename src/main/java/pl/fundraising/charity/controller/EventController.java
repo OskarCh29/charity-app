@@ -26,4 +26,5 @@ public class EventController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new GeneralServerResponse("Event: " + event.getName()
                 + " has been created. Event account base currency: " + event.getAccount().getCurrency().getSymbol()));
     }
+
 }

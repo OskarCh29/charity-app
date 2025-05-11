@@ -14,4 +14,5 @@ public class FinancialReportResponse {
     private BigDecimal balance;
 
     private String currency;
+
 }

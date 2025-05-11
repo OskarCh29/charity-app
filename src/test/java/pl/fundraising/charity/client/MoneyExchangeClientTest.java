@@ -11,9 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.client.RestTemplate;
-import pl.fundraising.charity.entity.Cantor;
+import pl.fundraising.charity.entity.MoneyExchange;
 import pl.fundraising.charity.entity.Currency;
-import pl.fundraising.charity.exception.CantorClientException;
+import pl.fundraising.charity.exception.MoneyExchangeClientException;
 import pl.fundraising.charity.util.TestUtil;
 
 import java.math.BigDecimal;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CantorClientTest {
+public class MoneyExchangeClientTest {
 
     private static final WireMockServer WIRE_MOCK_SERVER = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
 
@@ -33,7 +33,7 @@ public class CantorClientTest {
     private RestTemplate restTemplate;
 
     @Autowired
-    private CantorClient client;
+    private MoneyExchangeClient client;
 
     @BeforeAll
     public static void initOnce() {
@@ -48,12 +48,12 @@ public class CantorClientTest {
 
     @DynamicPropertySource
     static void dynamicProperties(DynamicPropertyRegistry registry) {
-        registry.add("cantor.baseUrl", WIRE_MOCK_SERVER::baseUrl);
+        registry.add("exchange.baseUrl", WIRE_MOCK_SERVER::baseUrl);
     }
 
     @Test
-    void shouldReturnStatus200WithMappedCantorObject() throws Exception {
-        var mockResponse = TestUtil.getJsonFromFile("/response/cantor_status200_response.json");
+    void shouldReturnStatus200WithMappedMoneyExchangeObject() throws Exception {
+        var mockResponse = TestUtil.getJsonFromFile("/response/exchange_status200_response.json");
         String baseCurrency = "PLN";
 
 
@@ -63,12 +63,12 @@ public class CantorClientTest {
                         .withBody(mockResponse)
                         .withHeader(CONTENT_TYPE, "application/json")));
 
-        Cantor cantor = client.getExchangeRates(baseCurrency, List.of(new Currency("USD")));
+        MoneyExchange moneyExchange = client.getExchangeRates(baseCurrency, List.of(new Currency("USD")));
 
-        assertNotNull(cantor, "Exchange rates should be obtained from API");
-        assertEquals(baseCurrency, cantor.getBaseCurrency(), "Rates should be according to base currency");
-        assertEquals(BigDecimal.ONE, cantor.getChangingRates().get("PLN"), "Exchange rate to base should 1:1");
-        assertEquals(4, cantor.getChangingRates().size(), "Rates should be provided for 4 basic curr");
+        assertNotNull(moneyExchange, "Exchange rates should be obtained from API");
+        assertEquals(baseCurrency, moneyExchange.getBaseCurrency(), "Rates should be according to base currency");
+        assertEquals(BigDecimal.ONE, moneyExchange.getChangingRates().get("PLN"), "Exchange rate to base should 1:1");
+        assertEquals(4, moneyExchange.getChangingRates().size(), "Rates should be provided for 4 basic curr");
     }
 
     @Test
@@ -78,6 +78,6 @@ public class CantorClientTest {
         WIRE_MOCK_SERVER.stubFor(WireMock.get(WireMock.urlPathMatching("/.*"))
                 .willReturn(badRequest()));
 
-        assertThrows(CantorClientException.class, () -> client.getExchangeRates(baseCurrency, currencyList));
+        assertThrows(MoneyExchangeClientException.class, () -> client.getExchangeRates(baseCurrency, currencyList));
     }
 }

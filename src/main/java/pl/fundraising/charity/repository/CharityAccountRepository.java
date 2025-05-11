@@ -14,4 +14,5 @@ public interface CharityAccountRepository extends JpaRepository<CharityAccount, 
             + "JOIN FETCH ca.event e "
             + "JOIN FETCH ca.currency c")
     List<CharityAccount> findAllAccountsWithEventAndCurrency();
+
 }

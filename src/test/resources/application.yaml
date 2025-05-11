@@ -14,6 +14,6 @@ spring:
       mode: always
   flyway:
     enabled: false
-cantor:
+exchange:
   baseUrl: https://api.freecurrencyapi.com/v1/latest
   securityKey: secretKey

@@ -23,7 +23,7 @@ public class CollectionBoxService {
     private final EventService eventService;
     private final DonationService donationService;
     private final AccountService accountService;
-    private final CantorService cantorService;
+    private final MoneyExchangeService moneyExchangeService;
 
     public CollectionBox createNewBox() {
         return boxRepository.save(new CollectionBox());
@@ -85,7 +85,7 @@ public class CollectionBoxService {
         long assignedEventId = box.getFundraisingEvent().getId();
         String baseCurrency = accountService.checkAccountBaseCurrency(assignedEventId);
 
-        BigDecimal payment = cantorService.exchangeBoxCurrencies(baseCurrency, box);
+        BigDecimal payment = moneyExchangeService.exchangeBoxCurrencies(baseCurrency, box);
 
         accountService.receivePayment(payment, assignedEventId);
         donationService.deleteDonationFromBox(boxId);

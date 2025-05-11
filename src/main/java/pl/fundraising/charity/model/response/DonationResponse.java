@@ -14,4 +14,5 @@ public class DonationResponse {
     private BigDecimal amount;
 
     private String currency;
+
 }
