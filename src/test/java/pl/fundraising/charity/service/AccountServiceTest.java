@@ -30,13 +30,17 @@ public class AccountServiceTest {
     @Autowired
     private CurrencyRepository currencyRepository;
 
+    @Autowired
+    private EventRepository eventRepository;
 
 
     @BeforeEach
     void resetAccount() {
         accountRepository.deleteAll();
+        eventRepository.deleteAll();
         currencyRepository.deleteAll();
     }
+
 
     @Test
     void createNewAccountShouldPostNewRecord() {
@@ -58,6 +62,19 @@ public class AccountServiceTest {
         CharityAccount updatedAccount = accountRepository.findById(account.getId()).get();
 
         assertEquals(BigDecimal.valueOf(200).stripTrailingZeros(), updatedAccount.getBalance().stripTrailingZeros());
+    }
+
+    @Test
+    void getAccountFinancialReportShouldReturnResult() {
+        initTestAccount();
+
+        List<FinancialReportResponse> response = accountService.getAccountsFinancialReport();
+
+        assertEquals(1,response.size());
+        FinancialReportResponse result = response.getFirst();
+        assertEquals("TestEvent",result.getCharityName());
+        assertEquals("PLN",result.getCurrency());
+        assertEquals(BigDecimal.valueOf(100).stripTrailingZeros(),result.getBalance().stripTrailingZeros());
     }
 
 
@@ -97,13 +114,21 @@ public class AccountServiceTest {
 
 
     private CharityAccount initTestAccount() {
-        CharityAccount account = new CharityAccount();
         Currency currency = new Currency("PLN");
         currencyRepository.save(currency);
 
+        CharityAccount account = new CharityAccount();
         account.setCurrency(currency);
-        account.setBalance(BigDecimal.valueOf(100.00));
-        return accountRepository.save(account);
+        account.setBalance(BigDecimal.valueOf(100));
+
+        FundraisingEvent event = new FundraisingEvent();
+        event.setName("TestEvent");
+
+        account.setEvent(event);
+        event.setAccount(account);
+        eventRepository.save(event);
+
+        return account;
 
     }
 }

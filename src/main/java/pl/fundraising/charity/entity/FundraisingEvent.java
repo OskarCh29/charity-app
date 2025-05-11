@@ -1,5 +1,6 @@
 package pl.fundraising.charity.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,7 +20,8 @@ public class FundraisingEvent {
 
     private String name;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private CharityAccount account;
 
     @OneToMany(mappedBy = "fundraisingEvent", cascade = CascadeType.ALL)

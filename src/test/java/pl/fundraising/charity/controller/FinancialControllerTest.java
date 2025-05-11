@@ -19,8 +19,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(FinancialReportController.class)
-public class FinancialReportControllerTest {
+@WebMvcTest(FinancialController.class)
+public class FinancialControllerTest {
 
     @MockitoBean
     private AccountService accountService;

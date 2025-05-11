@@ -30,7 +30,7 @@ public class CollectionBoxService {
     }
 
     public List<CollectionBoxResponse> getAllBoxesInfo() {
-        List<CollectionBox> allBoxes = boxRepository.findAll();
+        List<CollectionBox> allBoxes = boxRepository.findBoxesWithAllContent();
         if (allBoxes.isEmpty()) {
             throw new RecordNotFoundException("No boxes available - please create new one");
         }
@@ -47,7 +47,7 @@ public class CollectionBoxService {
     public void assignBoxToEvent(long boxId, long eventId) {
         CollectionBox box = findById(boxId);
         if (box.isAssigned()) {
-            throw new BoxAlreadyAssignedException("Box is already assigned to another fundraising event");
+            throw new BoxAlreadyAssignedException("Box is already assigned to fundraising event");
         }
         if (!box.isEmpty()) {
             donationService.deleteDonationFromBox(boxId);

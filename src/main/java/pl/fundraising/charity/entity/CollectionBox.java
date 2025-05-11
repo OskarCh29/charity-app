@@ -1,5 +1,7 @@
 package pl.fundraising.charity.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,9 +21,11 @@ public class CollectionBox {
     private long id;
 
     @ManyToOne
+    @JsonBackReference
     private FundraisingEvent fundraisingEvent;
 
     @OneToMany(mappedBy = "collectionBox", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Donation> boxMoney = new ArrayList<>();
 
     public boolean isEmpty() {

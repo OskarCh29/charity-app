@@ -12,6 +12,9 @@ public class TrimmedNotBlankValidator implements ConstraintValidator<TrimmedNotB
         if (value == null) {
             return false;
         }
+        if (Character.isWhitespace(value.charAt(0)) || Character.isWhitespace(value.charAt(value.length() - 1))) {
+            return false;
+        }
         String trimmed = value.trim();
         return trimmed.length() >= minLength;
     }
